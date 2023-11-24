@@ -1,2 +1,2 @@
-# lin_alg
+# gauss
 Rust linear algebra library.
