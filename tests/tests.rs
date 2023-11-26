@@ -2,7 +2,7 @@
 use gauss as gs;
 use gs::{Matrix, FloatMatrix};
 use gs::float_mat;
-use gs::mat;
+// use gs::mat;
 
 #[test]
 fn float_test() {
@@ -18,7 +18,7 @@ fn float_test() {
   mat1[(1, 1)] = 4.5;
   println!("{}", mat1);
 
-  // vec!(1, 2, 3);
+  vec!(1, 2, 3);
   // let mut vector: Vec<i32> = Vec::new();
   // vector.push(1);
   // let val = vector.get(0);
@@ -38,6 +38,24 @@ fn float_test() {
     Err(e) => println!("{}\nTest 3 passed", e),
   }
 
+  let mut mat6: FloatMatrix<f64> = FloatMatrix::new(3, 2);
+  let mut mat7: FloatMatrix<f64> = FloatMatrix::new(2, 3);
+
+  (mat6[(0, 0)], mat7[(0, 0)]) = (1.2, 1.2);
+  (mat6[(0, 1)], mat7[(0, 1)]) = (2.3, 2.3);
+  (mat6[(1, 0)], mat7[(1, 0)]) = (3.4, 3.4);
+  (mat6[(1, 1)], mat7[(1, 1)]) = (4.5, 4.5);
+  mat6[(2, 0)] = 5.6;
+  mat6[(2, 1)] = 6.7;
+  mat7[(0, 2)] = 5.6;
+  mat7[(1, 2)] = 6.7;
+
+  let mat8 = mat6.clone();
+  let mat9 = (mat6 * mat7).unwrap();
+
+  println!("{}\n", mat9);
+  println!("mat8:{}\nmat8.t():{}", mat8, mat8.t());
+
   // Test 4
   let epochs = 1000;
   for i in 1..=epochs {
@@ -56,29 +74,33 @@ fn float_test() {
   // Test 5
   print!("Sum matrix: ");
   for val in sum {
-    print!("{} ", val);
+    print!("{:.4} ", val);
   }
   println!();
 
   println!("Float Test finished!");
 }
-// #[test]
-// fn macro_test() {
-//   let mat1: FloatMatrix<f32> = float_mat![2, 2];
-//   let mat2: Matrix<i32> = mat![2, 2];
+#[test]
+fn macro_test() {
+  let mat1: FloatMatrix<f32> = float_mat![2, 2];
+  // let mat2: Matrix<i32> = mat![2, 2];
 
-//   let mat3: FloatMatrix<f64> = float_mat![
-//     1.0, 2.0, 3.0;
-//     4.0, 5.0, 6.0;
-//     7.0, 8.0, 9.0;
-//   ];
+  let mat3: FloatMatrix<f64> = float_mat![
+    1.0, 2.0, 3.0;
+    4.0, 5.0, 6.0;
+    7.0, 8.0, 9.0;
+  ];
+  
+  println!("{}\nsize: {:?}", mat3, mat3.size());
+  println!("{}", mat1);
+  println!("done!");
 
-//   let mat4: Matrix<i64> = mat![
-//     1, 2, 3;
-//     4, 5, 6;
-//     7, 8, 9;
-//   ];
-// }
+  // let mat4: Matrix<i64> = mat![
+  //   1, 2, 3;
+  //   4, 5, 6;
+  //   7, 8, 9;
+  // ];
+}
 
 #[test]
 fn integer_test() {
@@ -94,4 +116,25 @@ fn integer_test() {
   //println!("{}", mat2);
 
   //let mat3 = mat2 + mat1;
+}
+
+#[test]
+fn rref_test() {
+  let mat1: FloatMatrix<f32> = float_mat![
+    1.0, 3.0, 2.0;
+    6.0, 2.0, 4.0;
+    4.0, 2.0, 6.0;
+  ];
+
+  println!("{}", mat1);
+
+  let mat2 = mat1.rref();
+
+  println!("{}", mat2);
+}
+
+#[test]
+fn common_test() {
+  let i = gs::float_identity(4);
+  println!("{}", i);
 }
