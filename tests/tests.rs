@@ -1,12 +1,12 @@
 
 use gauss as gs;
+use gs::example;
 use gs::{Matrix, FloatMatrix};
 use gs::float_mat;
 // use gs::mat;
 
 #[test]
 fn float_test() {
-
   // Test 1
   let mut mat1: FloatMatrix<f64> = FloatMatrix::new(2, 2);
   let mat2: FloatMatrix<f64> = float_mat![2, 2];
@@ -19,7 +19,7 @@ fn float_test() {
   println!("{}", mat1);
 
   vec!(1, 2, 3);
-  // let mut vector: Vec<i32> = Vec::new();
+  let _vector: Vec<i32> = Vec::new();
   // vector.push(1);
   // let val = vector.get(0);
   // let res = val.unwrap().to_owned();
@@ -80,6 +80,7 @@ fn float_test() {
 
   println!("Float Test finished!");
 }
+
 #[test]
 fn macro_test() {
   let mat1: FloatMatrix<f32> = float_mat![2, 2];
@@ -100,6 +101,9 @@ fn macro_test() {
   //   4, 5, 6;
   //   7, 8, 9;
   // ];
+
+  example![1, 2, 3];
+
 }
 
 #[test]
@@ -121,9 +125,9 @@ fn integer_test() {
 #[test]
 fn rref_test() {
   let mat1: FloatMatrix<f32> = float_mat![
-    1.0, 3.0, 2.0;
-    6.0, 2.0, 4.0;
-    4.0, 2.0, 6.0;
+    6.0, 2.0, 4.0, 5.0;
+    1.0, 3.0, 2.0, 5.0;
+    4.0, 8.0, 12.0, 5.0;
   ];
 
   println!("{}", mat1);
@@ -135,6 +139,7 @@ fn rref_test() {
 
 #[test]
 fn common_test() {
-  let i = gs::float_identity(4);
-  println!("{}", i);
+  let i: FloatMatrix<f32> = FloatMatrix::<f32>::identity(3);
+  let j = Matrix::<u8>::identity(3);
+  println!("{i}\n{j}");
 }

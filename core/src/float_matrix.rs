@@ -80,25 +80,38 @@ impl<T: Float + std::fmt::Debug> FloatMatrix<T> {
     let mut rref: Vec<T> = self.matrix.clone();
     
     for i in 0..self.rows {
-      for j in i..self.rows {
-        if (self.matrix[i * self.cols] != NumCast::from(1.0).unwrap()) && (self.matrix[j * self.rows] > NumCast::from(0.0).unwrap()) {
+      for j in i+1..self.rows {
+        if (rref[i * self.cols] != NumCast::from(1.0).unwrap()) && (rref[j * self.cols] == NumCast::from(1.0).unwrap()) {
           swap_rows(&mut rref, i, j, self.cols);
         }
       }
       
-      if self.matrix[i * self.cols] != NumCast::from(1.0).unwrap() {
-        row_with_leading_one(&mut rref, i, i, self.cols);
+      if rref[i * self.cols] != NumCast::from(1.0).unwrap() {
+        let val = rref[i + (i * self.cols)];
+        println!("div {i}: {val:?}");
+        println!("{:?}", rref);
+        divide_row(&mut rref, i, i, self.cols);
+        println!("{:?}", rref);
       }
   
-      for j in i+1..self.rows {
-        row_sub(&mut rref, self.matrix[j * self.cols], j, i, self.cols);
-      }
+      // for j in i+1..self.rows {
+      //   row_sub(&mut rref, self.matrix[j * self.cols], j, i, self.cols);
+      // }
 
-      println!("{:?}", rref);
     }
 
     FloatMatrix {rows: self.rows, cols: self.cols, matrix: rref}
   } 
+
+  pub fn identity(size: usize) -> FloatMatrix<f32> {
+    let mut identity: FloatMatrix<f32> = FloatMatrix::new(size, size);
+  
+    for i in 0..size {
+      identity[(i, i)] = 1.0;
+    }
+    
+    identity
+  }
 }
 
 pub struct FloatMatrixIterator<'a, T: Float> {
@@ -274,13 +287,18 @@ fn swap_rows<T: Float>(matrix: &mut Vec<T>, to: usize, from: usize, column_size:
   }
 }
 
-fn row_with_leading_one<T: Float>(matrix: &mut Vec<T>, idx: usize, row: usize, column_size: usize) {
-  if matrix[idx + (row * column_size)] == NumCast::from(0.0).unwrap() {
+fn divide_row<T: Float + std::fmt::Debug>(matrix: &mut Vec<T>, idx: usize, row: usize, column_size: usize) {
+  let row_idx = row * column_size;
+  if matrix[idx + row_idx] == NumCast::from(0.0).unwrap() {
     return;
   }
 
+  let divisor = matrix[idx + row_idx];
+
   for i in 0..column_size {
-    matrix[i + (row * column_size)] = matrix[i + (row * column_size)] / matrix[idx + (row * column_size)];
+    let val = matrix[i + row_idx] / divisor;
+    println!("{val:?}");
+    matrix[i + row_idx] = val;
   }
 }
 
